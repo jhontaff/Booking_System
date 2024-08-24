@@ -29,6 +29,7 @@ public class JwtUtils {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
     public String getToken(UserDetails userDetails) {
+
         return generateToken(new HashMap<>(), userDetails);
     }
 

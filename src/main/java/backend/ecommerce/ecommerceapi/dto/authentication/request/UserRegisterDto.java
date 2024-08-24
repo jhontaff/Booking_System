@@ -1,4 +1,4 @@
-package backend.ecommerce.ecommerceapi.dto.user;
+package backend.ecommerce.ecommerceapi.dto.authentication.request;
 
 import backend.ecommerce.ecommerceapi.entity.Role;
 import jakarta.validation.constraints.Email;
@@ -25,11 +25,6 @@ public class UserRegisterDto {
     @Size(min=4, max=20, message="lastname must be between 4 and 20 characters")
     @Pattern(regexp="^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\\s'-]+$", message="lastname can only contain letters")
     private String lastname;
-
-    @NotBlank(message = "address can't be empty")
-    @Size(min=4, max=20, message="address must be between 4 and 20 characters")
-    @Pattern(regexp="^[a-zA-Z0-9\\s'-]+$", message="address can only contain letters and numbers")
-    private String address;
 
     @NotBlank(message = "email can't be empty")
     @Size(min=4, max=30, message="email must be between 4 and 30 characters")

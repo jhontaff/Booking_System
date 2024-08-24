@@ -1,4 +1,4 @@
-package backend.ecommerce.ecommerceapi.service.user;
+package backend.ecommerce.ecommerceapi.service.authentication.implement;
 
 import backend.ecommerce.ecommerceapi.entity.User;
 import backend.ecommerce.ecommerceapi.repository.UserRepository;
@@ -20,6 +20,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found with email: " + email));
-        return UserServiceImpl.toUserDetails(user);
+        return AuthServiceImpl.toUserDetails(user);
     }
 }

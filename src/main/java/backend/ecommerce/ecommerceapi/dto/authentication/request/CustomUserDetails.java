@@ -1,4 +1,4 @@
-package backend.ecommerce.ecommerceapi.dto.user;
+package backend.ecommerce.ecommerceapi.dto.authentication.request;
 
 import backend.ecommerce.ecommerceapi.entity.User;
 import lombok.RequiredArgsConstructor;

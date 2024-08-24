@@ -1,5 +1,8 @@
 package backend.ecommerce.ecommerceapi.config;
 
+import com.warrenstrange.googleauth.GoogleAuthenticator;
+import com.warrenstrange.googleauth.GoogleAuthenticatorConfig;
+import com.warrenstrange.googleauth.GoogleAuthenticatorKey;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -39,5 +42,18 @@ public class AppConfig {
         return authenticationProvider;
     }
 
+    @Bean
+    public GoogleAuthenticator googleAuthenticator() {
+        GoogleAuthenticatorConfig config = new GoogleAuthenticatorConfig.GoogleAuthenticatorConfigBuilder()
+                .setTimeStepSizeInMillis(180_000)
+                .build();
+
+        return new GoogleAuthenticator(config);
+    }
+
+    @Bean
+    public GoogleAuthenticatorKey googleAuthenticatorKey(GoogleAuthenticator googleAuthenticator) {
+        return googleAuthenticator.createCredentials();
+    }
 
 }

@@ -1,4 +1,4 @@
-package backend.ecommerce.ecommerceapi.dto.user;
+package backend.ecommerce.ecommerceapi.dto.authentication.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

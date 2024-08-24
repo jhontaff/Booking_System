@@ -1,13 +1,13 @@
-package backend.ecommerce.ecommerceapi.service.user;
+package backend.ecommerce.ecommerceapi.service.authentication;
 
-import backend.ecommerce.ecommerceapi.dto.user.UserAuthResponseDto;
-import backend.ecommerce.ecommerceapi.dto.user.UserRegisterDto;
-import backend.ecommerce.ecommerceapi.dto.user.UserLoginDto;
+import backend.ecommerce.ecommerceapi.dto.authentication.response.UserAuthResponseDto;
+import backend.ecommerce.ecommerceapi.dto.authentication.request.UserRegisterDto;
+import backend.ecommerce.ecommerceapi.dto.authentication.request.UserLoginDto;
 import backend.ecommerce.ecommerceapi.entity.User;
 import org.springframework.stereotype.Service;
 
 @Service
-public interface UserService {
+public interface AuthService {
 
     Boolean passwordMatch(String password, String confirmPassword);
     Boolean existsByEmail(String email);

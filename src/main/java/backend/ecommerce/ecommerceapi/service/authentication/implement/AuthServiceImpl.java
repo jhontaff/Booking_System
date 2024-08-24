@@ -1,17 +1,18 @@
-package backend.ecommerce.ecommerceapi.service.user;
+package backend.ecommerce.ecommerceapi.service.authentication.implement;
 
 import backend.ecommerce.ecommerceapi.config.exception.BadCredentialsException;
 import backend.ecommerce.ecommerceapi.config.exception.DuplicateEmailException;
 import backend.ecommerce.ecommerceapi.config.exception.PasswordDoesNotMatchException;
 import backend.ecommerce.ecommerceapi.config.security.jwt.JwtUtils;
-import backend.ecommerce.ecommerceapi.dto.user.UserAuthResponseDto;
-import backend.ecommerce.ecommerceapi.dto.user.UserLoginDto;
-import backend.ecommerce.ecommerceapi.dto.user.UserRegisterDto;
+import backend.ecommerce.ecommerceapi.dto.authentication.response.UserAuthResponseDto;
+import backend.ecommerce.ecommerceapi.dto.authentication.request.UserLoginDto;
+import backend.ecommerce.ecommerceapi.dto.authentication.request.UserRegisterDto;
 import backend.ecommerce.ecommerceapi.entity.ERole;
 import backend.ecommerce.ecommerceapi.entity.Role;
 import backend.ecommerce.ecommerceapi.entity.User;
 import backend.ecommerce.ecommerceapi.repository.RoleRepository;
 import backend.ecommerce.ecommerceapi.repository.UserRepository;
+import backend.ecommerce.ecommerceapi.service.authentication.AuthService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,7 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
     private final JwtUtils jwtUtils;
@@ -31,7 +32,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtils jwtUtils,
+    public AuthServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtils jwtUtils,
                            AuthenticationManager authenticationManager, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -98,10 +99,7 @@ public class UserServiceImpl implements UserService {
             user.setRoles(new HashSet<>());
         }
         user.getRoles().add(userRole);
-
         String token = jwtUtils.getToken(toUserDetails(user));
-
-
         this.userRepository.save(user);
         return UserAuthResponseDto.builder()
                 .token(token)
@@ -112,12 +110,9 @@ public class UserServiceImpl implements UserService {
     public UserAuthResponseDto login(UserLoginDto userLoginDto) {
         try {
             doAuthenticate(userLoginDto.getEmail(), userLoginDto.getPassword());
-
             User userDetails = userRepository.findByEmail(userLoginDto.getEmail()).orElseThrow(
                     () -> new RuntimeException("Error: User is not found."));
-
             String jwtToken = jwtUtils.getToken(toUserDetails(userDetails));
-
             return UserAuthResponseDto.builder()
                     .token(jwtToken)
                     .build();

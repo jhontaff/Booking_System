@@ -1,6 +1,6 @@
 package backend.ecommerce.ecommerceapi.config.security.jwt;
 
-import backend.ecommerce.ecommerceapi.service.user.UserDetailsServiceImpl;
+import backend.ecommerce.ecommerceapi.service.authentication.implement.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

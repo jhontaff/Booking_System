@@ -66,6 +66,19 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(getErrorsMap("Token expired exception: ", errors), new HttpHeaders(), HttpStatus.UNAUTHORIZED);
     }
 
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(OtpException.class)
+    public ResponseEntity<Map<String, List<String>>> handleOtpException(OtpException exception) {
+        List<String> errors = List.of(exception.getMessage());
+        return new ResponseEntity<>(getErrorsMap("OTP exception: ", errors), new HttpHeaders(), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(EmailNotFoundException.class)
+    public ResponseEntity<Map<String, List<String>>> handleUserNotFoundException(EmailNotFoundException exception) {
+        List<String> errors = List.of(exception.getMessage());
+        return new ResponseEntity<>(getErrorsMap("Email not found exception: ", errors), new HttpHeaders(), HttpStatus.NOT_FOUND);
+    }
 
     private Map<String, List<String>> getErrorsMap(String exception, List<String> errors) {
         Map<String, List<String>> errorResponse = new HashMap<>();

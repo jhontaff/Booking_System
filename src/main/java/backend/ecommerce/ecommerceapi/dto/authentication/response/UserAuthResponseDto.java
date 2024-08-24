@@ -1,4 +1,4 @@
-package backend.ecommerce.ecommerceapi.dto.user;
+package backend.ecommerce.ecommerceapi.dto.authentication.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
