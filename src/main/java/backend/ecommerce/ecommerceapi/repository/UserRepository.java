@@ -1,6 +1,6 @@
 package backend.ecommerce.ecommerceapi.repository;
 
-import backend.ecommerce.ecommerceapi.entity.User;
+import backend.ecommerce.ecommerceapi.entity.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;

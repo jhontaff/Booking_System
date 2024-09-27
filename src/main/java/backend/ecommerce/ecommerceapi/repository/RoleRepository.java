@@ -1,7 +1,7 @@
 package backend.ecommerce.ecommerceapi.repository;
 
-import backend.ecommerce.ecommerceapi.entity.ERole;
-import backend.ecommerce.ecommerceapi.entity.Role;
+import backend.ecommerce.ecommerceapi.entity.role.ERole;
+import backend.ecommerce.ecommerceapi.entity.role.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,5 +1,10 @@
 package backend.ecommerce.ecommerceapi.config;
 
+import backend.ecommerce.ecommerceapi.mapper.*;
+import backend.ecommerce.ecommerceapi.service.booking.ExtraResourceService;
+import backend.ecommerce.ecommerceapi.service.room.RoomService;
+import backend.ecommerce.ecommerceapi.service.room.RoomTypeService;
+import backend.ecommerce.ecommerceapi.service.user.UserService;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 import com.warrenstrange.googleauth.GoogleAuthenticatorConfig;
 import com.warrenstrange.googleauth.GoogleAuthenticatorKey;
@@ -25,6 +30,34 @@ public class AppConfig {
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public BookingMapper bookingMapper(UserService userService,
+                         ExtraResourceMapper extraResourceMapper,
+                         RoomMapper roomMapper,
+                         UserMapper userMapper) {
+        return new BookingMapper(userService, extraResourceMapper, roomMapper, userMapper);
+    }
+
+    @Bean
+    public ExtraResourceMapper extraResourceMapper (ExtraResourceService extraResourceService) {
+        return new ExtraResourceMapper(extraResourceService);
+    }
+
+    @Bean
+    public RoomMapper roomMapper(RoomService roomService) {
+        return new RoomMapper(roomService);
+    }
+
+    @Bean
+    public RoomTypeMapper roomTypeMapper(RoomTypeService roomTypeService) {
+        return new RoomTypeMapper(roomTypeService);
+    }
+
+    @Bean
+    public UserMapper userMapper(UserService userService) {
+        return new UserMapper(userService);
     }
 
     @Bean

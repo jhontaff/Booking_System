@@ -1,5 +1,6 @@
-package backend.ecommerce.ecommerceapi.entity;
+package backend.ecommerce.ecommerceapi.entity.role;
 
+import backend.ecommerce.ecommerceapi.entity.user.User;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;

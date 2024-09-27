@@ -1,32 +1,26 @@
 package backend.ecommerce.ecommerceapi.mapper;
 
-import backend.ecommerce.ecommerceapi.dto.authentication.request.UserRegisterDto;
-import backend.ecommerce.ecommerceapi.entity.User;
-
+import backend.ecommerce.ecommerceapi.dto.user.UserDto;
+import backend.ecommerce.ecommerceapi.entity.user.User;
+import backend.ecommerce.ecommerceapi.service.user.UserService;
 
 public class UserMapper {
 
-    private UserMapper() {
+    private final UserService userService;
+
+    public UserMapper(UserService userService) {
+        this.userService = userService;
     }
 
-    public static User toEntity(UserRegisterDto userRegisterDto) {
-        User user = new User();
-        user.setEmail(userRegisterDto.getEmail());
-        user.setPassword(userRegisterDto.getPassword());
-        user.setUsername(userRegisterDto.getUsername());
-        user.setLastname(userRegisterDto.getLastname());
-        user.setRoles(userRegisterDto.getRoles());
+    public UserDto toDto(User user) {
+        UserDto userDto = new UserDto();
+        userDto.setUserId(user.getUserId());
+        return userDto;
+    }
+
+    public User toEntity(UserDto userDto) {
+        User user = this.userService.getUserById(userDto.getUserId());
+        user.setUserId(userDto.getUserId());
         return user;
     }
-
-    public static UserRegisterDto toDto(User user) {
-        UserRegisterDto userRegisterDto = new UserRegisterDto();
-        userRegisterDto.setEmail(user.getEmail());
-        userRegisterDto.setPassword(user.getPassword());
-        userRegisterDto.setUsername(user.getUsername());
-        userRegisterDto.setLastname(user.getLastname());
-        userRegisterDto.setRoles(user.getRoles());
-        return userRegisterDto;
-    }
-
 }

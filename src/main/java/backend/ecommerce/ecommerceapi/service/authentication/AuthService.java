@@ -3,7 +3,7 @@ package backend.ecommerce.ecommerceapi.service.authentication;
 import backend.ecommerce.ecommerceapi.dto.authentication.response.UserAuthResponseDto;
 import backend.ecommerce.ecommerceapi.dto.authentication.request.UserRegisterDto;
 import backend.ecommerce.ecommerceapi.dto.authentication.request.UserLoginDto;
-import backend.ecommerce.ecommerceapi.entity.User;
+import backend.ecommerce.ecommerceapi.entity.user.User;
 import org.springframework.stereotype.Service;
 
 @Service

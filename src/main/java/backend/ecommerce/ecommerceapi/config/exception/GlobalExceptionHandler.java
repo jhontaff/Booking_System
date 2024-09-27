@@ -80,6 +80,20 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(getErrorsMap("Email not found exception: ", errors), new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(RoomException.class)
+    public ResponseEntity<Map<String, List<String>>> handleRoomException(RoomException exception) {
+        List<String> errors = List.of(exception.getMessage());
+        return new ResponseEntity<>(getErrorsMap("Room exception: ", errors), new HttpHeaders(), HttpStatus.NOT_FOUND);
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(BookingException.class)
+    public ResponseEntity<Map<String, List<String>>> handleBookingException(BookingException exception) {
+        List<String> errors = List.of(exception.getMessage());
+        return new ResponseEntity<>(getErrorsMap("Booking exception: ", errors), new HttpHeaders(), HttpStatus.NOT_FOUND);
+    }
+
     private Map<String, List<String>> getErrorsMap(String exception, List<String> errors) {
         Map<String, List<String>> errorResponse = new HashMap<>();
             errorResponse.put(exception, errors);

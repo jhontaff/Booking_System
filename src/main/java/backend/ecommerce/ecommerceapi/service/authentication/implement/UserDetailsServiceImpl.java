@@ -1,6 +1,6 @@
 package backend.ecommerce.ecommerceapi.service.authentication.implement;
 
-import backend.ecommerce.ecommerceapi.entity.User;
+import backend.ecommerce.ecommerceapi.entity.user.User;
 import backend.ecommerce.ecommerceapi.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

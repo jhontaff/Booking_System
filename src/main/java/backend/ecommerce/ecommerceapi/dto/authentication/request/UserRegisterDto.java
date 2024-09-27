@@ -1,6 +1,6 @@
 package backend.ecommerce.ecommerceapi.dto.authentication.request;
 
-import backend.ecommerce.ecommerceapi.entity.Role;
+import backend.ecommerce.ecommerceapi.entity.role.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -27,7 +27,6 @@ public class UserRegisterDto {
     private String lastname;
 
     @NotBlank(message = "email can't be empty")
-    @Size(min=4, max=30, message="email must be between 4 and 30 characters")
     @Email(message = "email should be valid")
     private String email;
 
@@ -44,7 +43,6 @@ public class UserRegisterDto {
             regexp="^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[_.-])(?=\\S+$)[A-Za-z0-9_.-]+$",
             message="password must contain: a minimum of 1 lower case letter [a-z] and a minimum of 1 upper case letter [A-Z] and a minimum of 1 numeric character [0-9] and a minimum of 1 special character: _ - .")
     private String confirmPassword;
-
 
     private Set<Role> roles;
 

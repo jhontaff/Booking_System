@@ -26,8 +26,10 @@ public class OtpController {
 
     @PostMapping("/validate")
     public ResponseEntity<UserAuthResponseDto> validateOtp(@RequestBody OtpRequestDto otpRequestDto) {
+        String userEmail = otpRequestDto.getUserLoginDto().getEmail();
+        String otp = otpRequestDto.getOtp();
         try {
-            otpService.validateOtp(otpRequestDto.getOtp());
+            otpService.validateOtp(userEmail, otp);
             return new ResponseEntity<>(this.authService.login(otpRequestDto.getUserLoginDto()), HttpStatus.OK);
         } catch (OtpException e) {
             throw new OtpException(e.getMessage());

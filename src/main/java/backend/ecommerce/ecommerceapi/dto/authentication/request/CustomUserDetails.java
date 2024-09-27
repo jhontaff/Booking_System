@@ -1,6 +1,6 @@
 package backend.ecommerce.ecommerceapi.dto.authentication.request;
 
-import backend.ecommerce.ecommerceapi.entity.User;
+import backend.ecommerce.ecommerceapi.entity.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.annotation.Transient;
 import org.springframework.security.core.GrantedAuthority;

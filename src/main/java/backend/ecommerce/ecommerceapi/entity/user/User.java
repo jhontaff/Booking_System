@@ -1,10 +1,13 @@
-package backend.ecommerce.ecommerceapi.entity;
+package backend.ecommerce.ecommerceapi.entity.user;
 
+import backend.ecommerce.ecommerceapi.entity.booking.Booking;
+import backend.ecommerce.ecommerceapi.entity.role.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -26,6 +29,9 @@ public class User {
     private String email;
 
     private String password;
+
+    @OneToMany(mappedBy = "bookedBy")
+    private List<Booking> bookings;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(name = "user_role",
