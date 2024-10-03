@@ -94,6 +94,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(getErrorsMap("Booking exception: ", errors), new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(RoleException.class)
+    public ResponseEntity<Map<String, List<String>>> handleRoleException(RoleException exception) {
+        List<String> errors = List.of(exception.getMessage());
+        return new ResponseEntity<>(getErrorsMap("Role exception: ", errors), new HttpHeaders(), HttpStatus.NOT_FOUND);
+    }
+
     private Map<String, List<String>> getErrorsMap(String exception, List<String> errors) {
         Map<String, List<String>> errorResponse = new HashMap<>();
             errorResponse.put(exception, errors);

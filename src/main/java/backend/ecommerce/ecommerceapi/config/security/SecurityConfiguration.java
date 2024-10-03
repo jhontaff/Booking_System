@@ -2,6 +2,7 @@ package backend.ecommerce.ecommerceapi.config.security;
 
 import backend.ecommerce.ecommerceapi.config.security.jwt.JwtAuthenticationEntryPoint;
 import backend.ecommerce.ecommerceapi.config.security.jwt.JwtAuthenticationFilter;
+import backend.ecommerce.ecommerceapi.entity.role.ERole;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -31,9 +32,17 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(CsrfConfigurer::disable)
+
                 .authorizeHttpRequests(auth ->
-                    auth.requestMatchers("/api/auth/**").permitAll()
-                            .anyRequest().authenticated())
+                    auth
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/2fa/otp/**").permitAll()
+                        .requestMatchers("/api/booking/**").hasAnyAuthority("USER", "ADMIN")
+                        .requestMatchers("/api/user/get-user-roles/**").hasAnyAuthority("USER", "ADMIN")
+                        .requestMatchers("/api/user/get-user/**").hasAuthority(ERole.ADMIN.name())
+                        .requestMatchers("/api/user/get-user-bookings/**").hasAnyAuthority("USER", "ADMIN")
+                        .requestMatchers("/api/user/set-user-role/**").hasRole("ADMIN")
+                        .anyRequest().authenticated())
                     .exceptionHandling(e -> e.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authProvider)
@@ -41,6 +50,5 @@ public class SecurityConfiguration {
 
         return http.build();
     }
-
 
 }

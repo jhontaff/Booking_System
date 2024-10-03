@@ -4,5 +4,6 @@ public enum EBookingState {
     PENDING,
     CANCELLED,
     REJECTED,
-    APPROVED
+    APPROVED,
+    DONE
 }

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/api/auth/otp")
+@RequestMapping(value = "/api/2fa/otp")
 public class OtpController {
 
     private final OtpService otpService;
@@ -25,12 +25,12 @@ public class OtpController {
     }
 
     @PostMapping("/validate")
-    public ResponseEntity<UserAuthResponseDto> validateOtp(@RequestBody OtpRequestDto otpRequestDto) {
+    public ResponseEntity<String> validateOtp(@RequestBody OtpRequestDto otpRequestDto) {
         String userEmail = otpRequestDto.getUserLoginDto().getEmail();
         String otp = otpRequestDto.getOtp();
         try {
             otpService.validateOtp(userEmail, otp);
-            return new ResponseEntity<>(this.authService.login(otpRequestDto.getUserLoginDto()), HttpStatus.OK);
+            return new ResponseEntity<>("otp successfully validated", HttpStatus.OK);
         } catch (OtpException e) {
             throw new OtpException(e.getMessage());
         }

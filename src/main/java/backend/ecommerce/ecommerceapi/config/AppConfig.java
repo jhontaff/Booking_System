@@ -56,8 +56,13 @@ public class AppConfig {
     }
 
     @Bean
-    public UserMapper userMapper(UserService userService) {
-        return new UserMapper(userService);
+    public UserMapper userMapper(UserService userService, RoleMapper roleMapper) {
+        return new UserMapper(userService, roleMapper);
+    }
+
+    @Bean
+    public RoleMapper roleMapper() {
+        return new RoleMapper();
     }
 
     @Bean
@@ -88,5 +93,6 @@ public class AppConfig {
     public GoogleAuthenticatorKey googleAuthenticatorKey(GoogleAuthenticator googleAuthenticator) {
         return googleAuthenticator.createCredentials();
     }
+
 
 }

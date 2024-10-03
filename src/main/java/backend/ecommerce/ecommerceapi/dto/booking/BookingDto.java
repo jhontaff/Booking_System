@@ -1,6 +1,7 @@
 package backend.ecommerce.ecommerceapi.dto.booking;
 
-import backend.ecommerce.ecommerceapi.dto.user.UserDto;
+import backend.ecommerce.ecommerceapi.dto.user.UserIdDto;
+import backend.ecommerce.ecommerceapi.entity.booking.EBookingState;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 public class BookingDto {
 
-    private UserDto userDto;
+    private UserIdDto userIdDto;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime checkIn;
@@ -25,4 +26,6 @@ public class BookingDto {
     private List<ExtraResourceDto> extraResourceDto;
 
     private RoomDto roomDto;
+
+    private EBookingState bookingState;
 }

@@ -50,8 +50,14 @@ public class BookingController {
     public ResponseEntity<String> updateBookingState(@RequestBody UpdateBookingStateDto updateBookingStateDto) {
         this.bookingService.changeBookingState(updateBookingStateDto.getBookingId(),updateBookingStateDto.getBookingStateId());
         List<ExtraResource> extraResources = this.bookingService.getBookingById(updateBookingStateDto.getBookingId()).getExtraResource();
-        this.bookingService.validateExtraResources(extraResources);
+        if (updateBookingStateDto.getBookingStateId() == 4) {
+            for (ExtraResource extraResource : extraResources) {
+                this.extraResourceService.minusUpdateExtraResource(extraResource.getExtraResourceId());
+            }
+        }
         return new ResponseEntity<>("Booking state updated successfully", HttpStatus.OK);
     }
+
+
 
 }

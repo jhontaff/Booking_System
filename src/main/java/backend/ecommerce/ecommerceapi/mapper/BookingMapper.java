@@ -27,11 +27,12 @@ public class BookingMapper {
         BookingDto bookingDto = new BookingDto();
         bookingDto.setCheckIn(booking.getCheckIn());
         bookingDto.setCheckOut(booking.getCheckOut());
-        bookingDto.setUserDto(this.userMapper.toDto(booking.getBookedBy()));
+        bookingDto.setUserIdDto(this.userMapper.toIdDto(booking.getBookedBy()));
         bookingDto.setRoomDto(roomMapper.toDto(booking.getRoom()));
         bookingDto.setExtraResourceDto(booking.getExtraResource().stream()
                 .map(extraResourceMapper::toDto)
                 .toList());
+        bookingDto.setBookingState(booking.getBookingState().getState());
         return bookingDto;
     }
 
@@ -39,7 +40,7 @@ public class BookingMapper {
         Booking booking = new Booking();
         booking.setCheckIn(bookingDto.getCheckIn());
         booking.setCheckOut(bookingDto.getCheckOut());
-        booking.setBookedBy(this.userService.getUserById(bookingDto.getUserDto().getUserId()));
+        booking.setBookedBy(this.userService.getUserById(bookingDto.getUserIdDto().getUserId()));
         booking.setRoom(roomMapper.toEntity(bookingDto.getRoomDto()));
         booking.setExtraResource(bookingDto.getExtraResourceDto().stream()
                 .map(extraResourceMapper::toEntity).toList());

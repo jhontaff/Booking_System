@@ -13,6 +13,7 @@ import backend.ecommerce.ecommerceapi.service.booking.BookingStateService;
 import backend.ecommerce.ecommerceapi.service.booking.ExtraResourceService;
 import backend.ecommerce.ecommerceapi.service.room.RoomService;
 import backend.ecommerce.ecommerceapi.service.user.UserService;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -88,6 +89,14 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    public List<Booking> getDoneBookings() {
+        List<Booking> bookings = this.bookingRepository.findAll();
+        return bookings.stream().filter(
+                        booking -> booking.getBookingState().getState().equals(EBookingState.DONE))
+                .toList();
+    }
+
+    @Override
     public Boolean isRoomAvailable(Long roomId, LocalDateTime checkIn, LocalDateTime checkOut) {
         List<Booking> bookings = this.getApprovedBookings();
         if (bookings.stream().noneMatch(
@@ -120,34 +129,36 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public void updateExtraResourceFromBooking(Long extraResourceId) {
-        ExtraResource extraResource = this.extraResourceService.getExtraResourceById(extraResourceId);
-        List<Booking> bookings = this.getAllBookings().stream().filter(
-                booking -> booking.getExtraResource().contains(extraResource)
-        ).toList();
-        for (Booking booking : bookings) {
-            if (booking.getBookingState().getState().equals(EBookingState.APPROVED)) {
-
-                extraResourceService.minusUpdateExtraResource(extraResourceId);
-
-                if (booking.getCheckOut().isBefore(LocalDateTime.now())) {
-                extraResourceService.plusUpdateExtraResource(extraResourceId);
+    @Scheduled(fixedRate = 60000)
+    public void updateBookingState() {
+        List<Booking> approvedBookings = this.getApprovedBookings();
+        List<Booking> pendingBookings = this.getPendingBookings();
+        for (Booking booking : approvedBookings) {
+            if (booking.getCheckOut().isBefore(LocalDateTime.now())) {
+                booking.setBookingState(this.bookingStateRepository.findByState(EBookingState.DONE).orElseThrow(
+                        () -> new BookingException("Wrong booking state")
+                ));
+                List<ExtraResource> extraResources = booking.getExtraResource();
+                for (ExtraResource extraResource : extraResources) {
+                    updateExtraResource(extraResource.getExtraResourceId());
                 }
+                this.bookingRepository.save(booking);
+            }
+        }
+        for (Booking booking : pendingBookings) {
+            if (booking.getCheckIn().isBefore(LocalDateTime.now())) {
+                booking.setBookingState(this.bookingStateRepository.findByState(EBookingState.REJECTED).orElseThrow(
+                        () -> new BookingException("Booking state not found")
+                ));
+                this.bookingRepository.save(booking);
             }
         }
     }
 
     @Override
-    public void validateExtraResources(List<ExtraResource> extraResources) {
-        extraResources.forEach(
-                extraResource -> {
-                    try {
-                        this.extraResourceService.isExtraResourceAvailable(extraResource.getExtraResourceId());
-                        updateExtraResourceFromBooking(extraResource.getExtraResourceId());
-                    } catch (BookingException e) {
-                        throw new BookingException(e.getMessage());
-                    }
-                });
+    public void updateExtraResource(Long extraResourceId) {
+        ExtraResource extraResource = this.extraResourceService.getExtraResourceById(extraResourceId);
+        this.extraResourceService.plusUpdateExtraResource(extraResource.getExtraResourceId());
     }
 
     @Override

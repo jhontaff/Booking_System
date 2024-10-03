@@ -9,15 +9,18 @@ import io.jsonwebtoken.security.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.security.Key;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Component
 public class JwtUtils {
@@ -29,16 +32,17 @@ public class JwtUtils {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
     public String getToken(UserDetails userDetails) {
-
-        return generateToken(new HashMap<>(), userDetails);
+        return generateToken(userDetails);
     }
 
-    public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+    public String generateToken(UserDetails userDetails) {
         String email = userDetails.getUsername();
         return Jwts
                 .builder()
-                .claims(extraClaims)
                 .subject(email)
+                .claim("roles", userDetails.getAuthorities().stream()
+                        .map(GrantedAuthority::getAuthority)
+                        .collect(Collectors.toSet()))
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date((new Date()).getTime() + this.jwtExpirationMs))
                 .signWith(key())
@@ -50,6 +54,7 @@ public class JwtUtils {
     }
 
     public String getEmailFromToken(String token) {
+
         return getClaim(token, Claims::getSubject);
     }
 
@@ -67,6 +72,14 @@ public class JwtUtils {
     {
         final Claims claims=getAllClaims(token);
         return claimsResolver.apply(claims);
+    }
+
+    public List<SimpleGrantedAuthority> getRolesFromToken(String token) {
+        Claims claims = getAllClaims(token);
+        Set<String> roles = claims.get("roles", Set.class);
+        return roles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .toList();
     }
 
     private Date getExpiration(String token) {

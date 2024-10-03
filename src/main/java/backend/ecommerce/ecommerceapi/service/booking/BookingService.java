@@ -1,7 +1,6 @@
 package backend.ecommerce.ecommerceapi.service.booking;
 
 import backend.ecommerce.ecommerceapi.entity.booking.Booking;
-import backend.ecommerce.ecommerceapi.entity.booking.ExtraResource;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,15 +19,17 @@ public interface BookingService {
 
     public List<Booking> getRejectedBookings();
 
+    public List<Booking> getDoneBookings();
+
+    public void updateBookingState();
+
     public Boolean isRoomAvailable(Long roomId, LocalDateTime checkIn, LocalDateTime checkOut);
 
     public Booking getBookingById(Long bookingId);
 
     public void validateDateBooking(Booking booking);
 
-    public void updateExtraResourceFromBooking(Long extraResourceId);
-
-    public void validateExtraResources(List<ExtraResource> extraResources);
+    public void updateExtraResource(Long extraResourceId);
 
     public void createBooking(Booking booking);
 
