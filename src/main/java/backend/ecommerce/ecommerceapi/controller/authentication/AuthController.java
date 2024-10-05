@@ -3,7 +3,6 @@ package backend.ecommerce.ecommerceapi.controller.authentication;
 import backend.ecommerce.ecommerceapi.config.exception.EmailNotFoundException;
 import backend.ecommerce.ecommerceapi.dto.authentication.request.UserLoginDto;
 import backend.ecommerce.ecommerceapi.dto.authentication.request.UserRegisterDto;
-import backend.ecommerce.ecommerceapi.dto.authentication.response.UserAuthResponseDto;
 import backend.ecommerce.ecommerceapi.entity.user.User;
 import backend.ecommerce.ecommerceapi.mapper.UserRegisterMapper;
 import backend.ecommerce.ecommerceapi.service.authentication.AuthService;
@@ -45,14 +44,12 @@ public class AuthController {
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<UserAuthResponseDto> signin(@Valid @RequestBody UserLoginDto userLoginDto) {
+    public ResponseEntity<String> signin(@Valid @RequestBody UserLoginDto userLoginDto) {
         String userEmail = userLoginDto.getEmail();
         if (this.authService.existsByEmail(userEmail).equals(Boolean.TRUE)) {
             String otp = otpService.generateOtp(userEmail);
             this.emailService.sendEmail(userLoginDto.getEmail(), "Here's your OTP ", otp);
-            UserAuthResponseDto responseDto = this.authService.login(userLoginDto);
-            responseDto.setMessage("OTP has been sent to your email");
-            return new ResponseEntity<>(responseDto, HttpStatus.OK);
+            return new ResponseEntity<>(("OTP has been sent to your email"), HttpStatus.OK);
         } else {
             throw new EmailNotFoundException("Email not found");
         }

@@ -9,16 +9,19 @@ import io.jsonwebtoken.security.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.security.Key;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -27,10 +30,17 @@ public class JwtUtils {
 
     @Value("${amazon.app.jwtSecret}")
     private String jwtSecret;
+
     @Value("${amazon.app.jwtExpirationMs}")
     private int jwtExpirationMs;
+
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
+    private final UserDetailsService userDetailsService;
+
+    public JwtUtils(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
     public String getToken(UserDetails userDetails) {
         return generateToken(userDetails);
     }
@@ -54,7 +64,6 @@ public class JwtUtils {
     }
 
     public String getEmailFromToken(String token) {
-
         return getClaim(token, Claims::getSubject);
     }
 
@@ -74,20 +83,25 @@ public class JwtUtils {
         return claimsResolver.apply(claims);
     }
 
-    public List<SimpleGrantedAuthority> getRolesFromToken(String token) {
-        Claims claims = getAllClaims(token);
-        Set<String> roles = claims.get("roles", Set.class);
-        return roles.stream()
-                .map(SimpleGrantedAuthority::new)
-                .toList();
-    }
-
     private Date getExpiration(String token) {
         return getClaim(token, Claims::getExpiration);
     }
 
     private boolean isTokenExpired(String token) {
         return getExpiration(token).before(new Date());
+    }
+
+    public Authentication getAuthentication(String token) {
+      Claims claims = getAllClaims(token);
+      List<String> roles = claims.get("roles", List.class);
+
+      Collection<? extends GrantedAuthority> authorities = roles.stream()
+        .map(SimpleGrantedAuthority::new)
+              .toList();
+
+      UserDetails userDetails = userDetailsService.loadUserByUsername(claims.getSubject());
+      return new UsernamePasswordAuthenticationToken(userDetails,null, authorities);
+
     }
 
     public boolean validateJwtToken(String authToken) {

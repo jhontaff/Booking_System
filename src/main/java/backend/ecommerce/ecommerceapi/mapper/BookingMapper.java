@@ -25,6 +25,7 @@ public class BookingMapper {
 
     public BookingDto toDto(Booking booking) {
         BookingDto bookingDto = new BookingDto();
+        bookingDto.setBookingId(booking.getBookingId());
         bookingDto.setCheckIn(booking.getCheckIn());
         bookingDto.setCheckOut(booking.getCheckOut());
         bookingDto.setUserIdDto(this.userMapper.toIdDto(booking.getBookedBy()));

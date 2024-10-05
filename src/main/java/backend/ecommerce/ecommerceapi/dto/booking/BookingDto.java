@@ -15,6 +15,8 @@ import java.util.List;
 @NoArgsConstructor
 public class BookingDto {
 
+    private Long bookingId;
+
     private UserIdDto userIdDto;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)

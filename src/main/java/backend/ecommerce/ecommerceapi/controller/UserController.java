@@ -12,6 +12,7 @@ import backend.ecommerce.ecommerceapi.mapper.UserMapper;
 import backend.ecommerce.ecommerceapi.service.role.RoleService;
 import backend.ecommerce.ecommerceapi.service.user.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

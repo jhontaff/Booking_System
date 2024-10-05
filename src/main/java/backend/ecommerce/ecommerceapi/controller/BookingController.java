@@ -10,10 +10,7 @@ import backend.ecommerce.ecommerceapi.service.booking.BookingService;
 import backend.ecommerce.ecommerceapi.service.booking.ExtraResourceService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -58,6 +55,53 @@ public class BookingController {
         return new ResponseEntity<>("Booking state updated successfully", HttpStatus.OK);
     }
 
+    @GetMapping("/get-all-bookings")
+    public ResponseEntity<List<BookingDto>> getAllBookings() {
+        List<Booking> bookings = this.bookingService.getAllBookings();
+        return new ResponseEntity<>(bookings.stream().map(
+                bookingMapper::toDto).toList(), HttpStatus.OK);
+    }
+
+    @GetMapping("/get-booking/{bookingId}")
+    public ResponseEntity<BookingDto> getBooking(@PathVariable Long bookingId) {
+        Booking booking = this.bookingService.getBookingById(bookingId);
+        return new ResponseEntity<>(bookingMapper.toDto(booking), HttpStatus.OK);
+    }
+
+    @GetMapping("/get-approved-bookings")
+    public ResponseEntity<List<BookingDto>> getApprovedBookings() {
+        List<Booking> bookings = this.bookingService.getApprovedBookings();
+        return new ResponseEntity<>(bookings.stream().map(
+                bookingMapper::toDto).toList(), HttpStatus.OK);
+    }
+
+    @GetMapping("/get-pending-bookings")
+    public ResponseEntity<List<BookingDto>> getPendingBookings() {
+        List<Booking> bookings = this.bookingService.getPendingBookings();
+        return new ResponseEntity<>(bookings.stream().map(
+                bookingMapper::toDto).toList(), HttpStatus.OK);
+    }
+
+    @GetMapping("/get-rejected-bookings")
+    public ResponseEntity<List<BookingDto>> getRejectedBookings() {
+        List<Booking> bookings = this.bookingService.getRejectedBookings();
+        return new ResponseEntity<>(bookings.stream().map(
+                bookingMapper::toDto).toList(), HttpStatus.OK);
+    }
+
+    @GetMapping("/get-canceled-bookings")
+    public ResponseEntity<List<BookingDto>> getCanceledBookings() {
+        List<Booking> bookings = this.bookingService.getCancelledBookings();
+        return new ResponseEntity<>(bookings.stream().map(
+                bookingMapper::toDto).toList(), HttpStatus.OK);
+    }
+
+    @GetMapping("/get-done-bookings")
+    public ResponseEntity<List<BookingDto>> getDoneBookings() {
+        List<Booking> bookings = this.bookingService.getDoneBookings();
+        return new ResponseEntity<>(bookings.stream().map(
+                bookingMapper::toDto).toList(), HttpStatus.OK);
+    }
 
 
 }

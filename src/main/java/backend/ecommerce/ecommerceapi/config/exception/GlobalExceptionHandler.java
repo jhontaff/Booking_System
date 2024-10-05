@@ -101,6 +101,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(getErrorsMap("Role exception: ", errors), new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(PdfException.class)
+    public ResponseEntity<Map<String, List<String>>> handlePdfException(PdfException exception) {
+        List<String> errors = List.of(exception.getMessage());
+        return new ResponseEntity<>(getErrorsMap("Pdf exception: ", errors), new HttpHeaders(), HttpStatus.NOT_FOUND);
+    }
+
     private Map<String, List<String>> getErrorsMap(String exception, List<String> errors) {
         Map<String, List<String>> errorResponse = new HashMap<>();
             errorResponse.put(exception, errors);
