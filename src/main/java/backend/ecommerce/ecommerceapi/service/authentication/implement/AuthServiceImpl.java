@@ -109,9 +109,9 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public UserAuthResponseDto login(UserLoginDto userLoginDto) {
         try {
-            doAuthenticate(userLoginDto.getEmail(), userLoginDto.getPassword());
             User userDetails = userRepository.findByEmail(userLoginDto.getEmail()).orElseThrow(
                     () -> new RuntimeException("Error: User is not found."));
+            doAuthenticate(userLoginDto.getEmail(), userLoginDto.getPassword());
             String jwtToken = jwtUtils.getToken(toUserDetails(userDetails));
             return UserAuthResponseDto.builder()
                     .token(jwtToken)
@@ -123,7 +123,7 @@ public class AuthServiceImpl implements AuthService {
 
     }
 
-    private void doAuthenticate(String email, String password) {
+    public void doAuthenticate(String email, String password) {
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(email, password);
         try {
             authenticationManager.authenticate(authentication);
